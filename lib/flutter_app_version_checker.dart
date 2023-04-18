@@ -18,6 +18,8 @@ class AppVersionChecker {
   /// if [appId] is null the [appId] will take the Flutter package identifier
   final String? appId;
 
+  final String? country;
+
   /// Select The marketplace of your app
   /// default will be `AndroidStore.GooglePlayStore`
   final AndroidStore androidStore;
@@ -25,6 +27,7 @@ class AppVersionChecker {
   AppVersionChecker({
     this.currentVersion,
     this.appId,
+    this.country = 'JP',
     this.androidStore = AndroidStore.googlePlayStore,
   });
 
@@ -52,8 +55,12 @@ class AppVersionChecker {
     String? errorMsg;
     String? newVersion;
     String? url;
-    var uri =
-        Uri.https("itunes.apple.com", "/lookup", {"bundleId": packageName});
+    var uri = Uri.https("itunes.apple.com", "/lookup", 
+      {
+        "bundleId": packageName,
+        "country": country,
+      }
+    );
     try {
       final response = await http.get(uri);
       if (response.statusCode != 200) {
